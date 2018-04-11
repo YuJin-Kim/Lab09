@@ -20,8 +20,8 @@ public class SalesAssociate {
 	 * @param name
 	 */
 	
-	public void setName(String name) {
-		this.name=name;
+	public void setName(String name) { // setting name method
+		this.name=name; // put name(parameter) to name(member of this class)
 	}
 	
 	/**
@@ -29,8 +29,8 @@ public class SalesAssociate {
 	 * @param sales
 	 */
 	
-	public void setSales(double sales) {
-		this.sales=sales;
+	public void setSales(double sales) { // setting sales method
+		this.sales=sales; // put sales(parameter) to sales(member of this class)
 	}
 	
 	/**
@@ -38,8 +38,8 @@ public class SalesAssociate {
 	 * @return
 	 */
 	
-	public String getName() {
-		return name;
+	public String getName() { // getting name method
+		return name; // return name
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class SalesAssociate {
 	 * @return
 	 */
 	
-	public double getSales() {
-		return sales;
+	public double getSales() { // getting sales method
+		return sales; // return sales
 	}
 }
