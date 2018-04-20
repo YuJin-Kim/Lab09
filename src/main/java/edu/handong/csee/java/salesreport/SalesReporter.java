@@ -1,11 +1,12 @@
-package edu.handong.csee.java.salesreport;
+package edu.handong.csee.java.salesreport; // package
 
-import java.util.Scanner;
+import java.util.ArrayList; // For using ArrayList
+import java.util.Scanner; // For using Scanner
 
 /**
  * This class define SalesReporter object. </br>
- * The SalesReporter class has five members.</br>
- * => highestSales, averageSales, highestSalesIndex, team and numberOfAssociates</br>
+ * The SalesReporter class has four members.</br>
+ * => highestSales, averageSales, highestSalesIndex and team</br>
  * The SalesReporter class has getData(), computeStats() and displayResults() methods.</br>
  * 
  * @author YuJin
@@ -16,30 +17,36 @@ public class SalesReporter {
 	private double highestSales; // create private double member highestSales
 	private double averageSales=0; // create private double member averageSales and initialize zero
 	private int highestSalesIndex; // create private int member highestSalesIndex
-	private SalesAssociate[] team; // create private SalesAssociate class array member team
-	private int numberOfAssociates; // create private int numberOfAssociates, same as team length
+	private ArrayList<SalesAssociate> team; // create private SalesAssociate class arrayList member team
 	
 	/**
 	 * This method is getting data method</br>
 	 * 
 	 */
 	
-	public void getData() {
+	public void getData() { // for getting data method
+		
 		Scanner keyboard = new Scanner(System.in); // for scanner
+		team = new ArrayList<SalesAssociate>(); // ready to use ArrayList team
+		boolean answer = false; // create boolean type variable 'answer' and initialize false
+		int count=1; // create int type variable 'count' and initialize one
 		
-		System.out.println("Enter number of sales associates:"); // print out ""
-		numberOfAssociates=keyboard.nextInt(); // input int type variable numberOfAssociates by keyboard
-		
-		team = new SalesAssociate [numberOfAssociates]; // 
-		
-		for (int count=0; count < team.length; count++) {
-			team[count] = new SalesAssociate(); // create SalesAssociate object 'team'array that has size
-			keyboard.nextLine();
-			System.out.println("Enter data for associate number "+(count+1));
-			System.out.print("Enter name of sales associate: ");
-			team[count].name=keyboard.nextLine();
-			System.out.print("Enter associate's sales: $");
-			team[count].sales=keyboard.nextDouble();
+		while (!answer) { // repeat size of team(number of associates) times this for loop
+			SalesAssociate s = new SalesAssociate(); // create SalesAssociate object 's'
+			
+			System.out.println("Enter data for associate number "+count); // print out ""
+			System.out.print("Enter name of sales associate: "); // print out ""
+			s.name=keyboard.nextLine(); // input String type variable s.name by keyboard
+			System.out.print("Enter associate's sales: $"); // print out ""
+			s.sales=keyboard.nextDouble(); // input double type variable s.sales by keyboard
+			team.add(s); // add a to ArrayList team
+			System.out.print ("More sales associates for the list? "); // print out ""
+			String ans = keyboard.next(); // create String type variable 'ans' and input String type variable by keyboard
+			if (!ans.equalsIgnoreCase ("yes")) // if ans isn't yes
+				answer = true; // put "true" to answer
+			count++; // count increase one
+            System.out.println(); // new line
+            keyboard.nextLine(); // input " " or "\n" and so on
 		}
 	}
 	
@@ -49,45 +56,51 @@ public class SalesReporter {
 	 * 
 	 */
 	
-	public void computeStats() {
+	public void computeStats() { // for computing highestSales and averageSales method
 		
-		highestSales=team[0].sales;
+		SalesAssociate s = new SalesAssociate(); // create SalesAssociate object 's'
+		s=team.get(0); // put team's 0th array to s
+		averageSales+=s.sales; // add s.sales to averageSales
+		highestSales=s.sales; // add s.sales to highestSales
 		
-		for (int count=1; count<team.length; count++)
-			if (highestSales<team[count].sales) {
-				highestSales=team[count].sales;
-				highestSalesIndex=count;
+		for (int count=1; count<team.size(); count++) { // repeat (size of team-1)times this for loop because set up the highestSales with sales value of team's 0th array
+			s=team.get(count); // put team's (count)array to s
+			averageSales+=s.sales; // add s.sales to averageSales
+			if (highestSales<s.sales) { // if s.sales is bigger than highestSales
+				highestSales=s.sales; // put s.sales to highestSales
+				highestSalesIndex=count; // put count to highestSalesIndex
 			}
+		}
 		
-		for(int count=0; count<team.length; count++)
-			averageSales+=team[count].sales;
-		
-		averageSales=averageSales/3.0;
+		averageSales=averageSales/(double)team.size(); // put the value which divide team.size from averageSales to averageSales
 	}
-	
+
 	/**
 	 * This method is displaying result of status method</br>
 	 * 
 	 */
 	
-	public void displayResults() {
+	public void displayResults() { // display the values of members method
+		SalesAssociate s = new SalesAssociate(); // create SalesAssociate object 's'
+		s=team.get(highestSalesIndex); // put team's (highestSalesIndex)array to s
 		System.out.println("Average sales per associate is $"+averageSales); // print out ""
 		System.out.println("The highest sales figure is $"+highestSales); // print out ""
 		System.out.println("The following had the highest sales:"); // print out ""
-		System.out.println("Name: "+team[highestSalesIndex].name); // print out ""
-		System.out.println("Sales: $"+team[highestSalesIndex].sales); // print out ""
-		System.out.println("$"+(team[highestSalesIndex].sales-averageSales)+" above the average."); // print out ""
+		System.out.println("Name: "+s.name); // print out ""
+		System.out.println("Sales: $"+s.sales); // print out ""
+		System.out.println("$"+(s.sales-averageSales)+" above the average."); // print out ""
 		System.out.println("The rest performed as follows:"); // print out ""
-		for(int count=0; count<team.length; count++) {
-			if (count==highestSalesIndex)
-				continue;
-			else {
-					System.out.println("Name: "+team[count].name); // print out ""
-					System.out.println("Sales: $"+team[count].sales); // print out ""
-					if (team[count].sales>averageSales)
-						System.out.println("$"+(team[count].sales-averageSales)+" above the average."); // print out ""
-					else
-						System.out.println("$"+(averageSales-team[count].sales)+" below the average."); // print out ""
+		for(int count=0; count<team.size(); count++) { // repeat size of team times this for loop
+			s=team.get(count); // put team's (count)array to s
+			if (count==highestSalesIndex) // if value of count equals value of highestSalesIndes
+				continue; // pass once
+			else { // else
+					System.out.println("Name: "+s.name); // print out ""
+					System.out.println("Sales: $"+s.sales); // print out ""
+					if (s.sales>averageSales) // if s.sales is bigger than averageSales
+						System.out.println("$"+(s.sales-averageSales)+" above the average."); // print out ""
+					else // else
+						System.out.println("$"+(averageSales-s.sales)+" below the average."); // print out ""
 			}
 		}
 	}
@@ -95,7 +108,7 @@ public class SalesReporter {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		SalesReporter salesAssociates = new SalesReporter(); // create SalesReporter object 'salesAssociates
+		SalesReporter salesAssociates = new SalesReporter(); // create SalesReporter object 'salesAssociates'
 
 		salesAssociates.getData(); // execute salesAssociates.getData() method
 		salesAssociates.computeStats(); // execute salesAssociates.computeStats() method
